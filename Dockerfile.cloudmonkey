@@ -1,0 +1,7 @@
+FROM python:2.7
+
+RUN pip install cloudmonkey
+
+RUN cloudmonkey init; exit 0
+
+ENTRYPOINT ["cloudmonkey"]
