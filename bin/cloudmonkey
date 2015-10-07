@@ -1,0 +1,8 @@
+#!/bin/sh
+( docker images | awk '{print $1}' | grep -qw cloudmonkey ) || \
+docker build -t cloudmonkey -f ./dockerfiles/Dockerfile.cloudmonkey .
+
+[ -n "${CLOUDSTACK_SIMULATER_NAME}" ] && NAME=${CLOUDSTACK_SIMULATER_NAME} || NAME=cloudstack
+
+[[ $- == *i* ]] && TTY_OPTION="-t" || TTY_OPTION=""
+docker run ${TTY_OPTION} -i --rm --net container:${NAME} cloudmonkey $*

@@ -1,0 +1,8 @@
+#!/bin/sh
+
+if [ -p /dev/stdin ] ; then
+  cat - | docker run -i --rm realguess/jq jq $*
+else
+  docker run -i --rm realguess/jq jq $*
+fi 
+

@@ -1,0 +1,18 @@
+#!/bin/sh
+
+DIR="$(dirname $0)"
+
+cloudmonkey="${DIR}/cloudmonkey -d json"
+jq="${DIR}/jq"
+
+LIST_USERS_RESP=$( ${cloudmonkey} list users username=admin )
+
+CLOUDSTACK_API_URL="http://localhost:8080/client/api"
+CLOUDSTACK_API_KEY=$( echo "${LIST_USERS_RESP}" | ${jq} -r ".user[0].apikey" )
+CLOUDSTACK_SECRET_KEY=$( echo "${LIST_USERS_RESP}" | ${jq} -r ".user[0].secretkey" )
+
+cat <<EOF > terraform.tfvars
+cloudstack_api_url    = "${CLOUDSTACK_API_URL}"
+cloudstack_api_key    = "${CLOUDSTACK_API_KEY}"
+cloudstack_secret_key = "${CLOUDSTACK_SECRET_KEY}"
+EOF

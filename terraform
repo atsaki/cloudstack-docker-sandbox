@@ -1,2 +1,0 @@
-#!/bin/sh
-docker run -it --rm --net container:cloudstack -v $(pwd):/data uzyexe/terraform $*

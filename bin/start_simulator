@@ -1,0 +1,83 @@
+#!/bin/sh
+
+tags=(
+  "4.5.2"
+  "4.5.2-basic"
+  "4.5.2-advanced"
+)
+
+default_tag="4.5.2-advanced"
+default_name="cloudstack"
+default_port=8080
+
+function list_tags {
+  local tag
+  for tag in ${tags[@]}; do echo ${tag}; done
+}
+
+function is_contained {
+  local e
+  for e in ${@:2}; do [[ "$e" == "${1}" ]] && return 0; done
+}
+
+function usage {
+  cat <<EOF
+Usage:
+$(basename ${0}) [tag]
+
+Options:
+--help, -h        print this
+--list, -l        print available tags
+--name            container name (default:${default_name})
+--tag             image tag (default:${default_tag})
+--port            host port (default:${default_port})
+EOF
+}
+
+name=${default_name}
+tag=${default_tag}
+
+while [ $# -gt 0 ];
+do
+    case ${1} in
+
+        --help|-h)
+            usage
+            exit 0
+            ;;
+
+        --list|-l)
+            list_tags
+            exit 0
+            ;;
+
+        --name)
+            name=${2}
+            shift
+            ;;
+
+        --tag)
+            tag=${2}
+            shift
+            ;;
+
+        --port)
+            port=${2}
+            shift
+            ;;
+
+        *)
+            echo "[ERROR] Invalid option '${1}'"
+            usage
+            exit 1
+            ;;
+    esac
+    shift
+done
+
+if ! is_contained "${tag}" "${tags[@]}"; then
+  echo "${tag} is not available tag."
+  exit 1
+fi
+
+docker run --name ${name} -d -p ${port}:8080 atsaki/cloudstack-simulator:${tag}
