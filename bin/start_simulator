@@ -23,19 +23,15 @@ function is_contained {
 function usage {
   cat <<EOF
 Usage:
-$(basename ${0}) [tag]
+$(basename ${0}) [options] [tag]
 
 Options:
 --help, -h        print this
 --list, -l        print available tags
 --name            container name (default:${default_name})
---tag             image tag (default:${default_tag})
 --port            host port (default:${default_port})
 EOF
 }
-
-name=${default_name}
-tag=${default_tag}
 
 while [ $# -gt 0 ];
 do
@@ -56,17 +52,12 @@ do
             shift
             ;;
 
-        --tag)
-            tag=${2}
-            shift
-            ;;
-
         --port)
             port=${2}
             shift
             ;;
 
-        *)
+        --*|-*)
             echo "[ERROR] Invalid option '${1}'"
             usage
             exit 1
@@ -74,6 +65,10 @@ do
     esac
     shift
 done
+
+[ -n "$name" ] || name=${default_name}
+[ -n "$tag" ] || tag=${default_tag}
+[ -n "$port" ] || port=${default_port}
 
 if ! is_contained "${tag}" "${tags[@]}"; then
   echo "${tag} is not available tag."
