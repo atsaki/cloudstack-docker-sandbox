@@ -21,6 +21,7 @@ resource "cloudstack_instance" "vm01" {
   template = "CentOS 5.3(64-bit) no GUI (Simulator)"
   service_offering = "Small Instance"
   network = "${cloudstack_network.nw01.id}"
+  expunge = true
 }
 
 resource "cloudstack_ipaddress" "ip01" {
