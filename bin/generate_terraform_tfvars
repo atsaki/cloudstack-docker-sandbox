@@ -7,7 +7,7 @@ jq="${DIR}/jq"
 
 LIST_USERS_RESP=$( ${cloudmonkey} list users username=admin )
 
-CLOUDSTACK_API_URL="http://localhost:8080/client/api"
+CLOUDSTACK_API_URL="http://127.0.0.1:8080/client/api"
 CLOUDSTACK_API_KEY=$( echo "${LIST_USERS_RESP}" | ${jq} -r ".user[0].apikey" )
 CLOUDSTACK_SECRET_KEY=$( echo "${LIST_USERS_RESP}" | ${jq} -r ".user[0].secretkey" )
 
